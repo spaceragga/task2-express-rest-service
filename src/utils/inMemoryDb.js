@@ -1,6 +1,6 @@
 const User = require('../resources/users/user.model');
 const Board = require('../resources/boards/board.model');
-// const Task = require('../resources/users/task.model');
+const Task = require('../resources/tasks/task.model');
 
 const db = {
     Users: [],
@@ -32,10 +32,10 @@ const db = {
     }
     const board = new Board();
     db.Boards.push(board);
-    // db.Tasks.push(
-    //     new Task({ boardId: board.id }),
-    //     new Task({ boardId: board.id })
-    // );
+    db.Tasks.push(
+        new Task({ boardId: board.id }),
+        new Task({ boardId: board.id })
+    );
 })();
 
 const getAllEntities = tableName => db[tableName].filter(entity => entity);
