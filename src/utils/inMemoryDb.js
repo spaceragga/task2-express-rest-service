@@ -1,10 +1,10 @@
 const User = require('../resources/users/user.model');
-// const Board = require('../resources/users/board.model');
+const Board = require('../resources/boards/board.model');
 // const Task = require('../resources/users/task.model');
 
 const db = {
     Users: [],
-    Boaeds: [],
+    Boards: [],
     Tasks: [],
     // fixUsersStructure: user => {
     //     if(user) {
@@ -30,8 +30,8 @@ const db = {
     for(let i = 0; i < 3; i += 1) {
         db.Users.push(new User());
     }
-    // const board = new Board();
-    // db.Boards.push(board);
+    const board = new Board();
+    db.Boards.push(board);
     // db.Tasks.push(
     //     new Task({ boardId: board.id }),
     //     new Task({ boardId: board.id })
@@ -81,7 +81,6 @@ const updateEntity = async (tableName, id, entity) => {
     const oldEntity = getEntity(tableName, id);
     if(oldEntity) {
         db[tableName][db[tableName].indexOf(oldEntity)] = {...entity};
-        // db[tableName][db[tableName].indexOf(oldEntity)] = new User () {...entity};
     }
 
     return getEntity(tableName, id);
