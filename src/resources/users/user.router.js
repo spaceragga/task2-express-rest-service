@@ -5,10 +5,10 @@ const userService = require('./user.service');
 const wrapAsync = require('../../utils/wrapAsync');
 
 router.route('/').get(
-  wrapAsync(async (req, res) => {
+  async (req, res) => {
     const users = await userService.getAll();
     await res.status(OK).json(users.map(User.toResponse));
-  })
+  }
 );
 
 router.route('/:id').get(

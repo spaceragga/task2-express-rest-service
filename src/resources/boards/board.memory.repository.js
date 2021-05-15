@@ -1,4 +1,4 @@
-const DB = require('../../utils/inMemoryDb');
+const DB = require('../../utils/hardcodeDB');
 
 const TABLE_NAME = 'Boards';
 // const User = require('./user.model');

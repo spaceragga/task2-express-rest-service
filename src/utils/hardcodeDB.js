@@ -6,32 +6,12 @@ const db = {
     Users: [],
     Boards: [],
     Tasks: [],
-    // fixUsersStructure: user => {
-    //     if(user) {
-    //         db.Tasks.filter(task => task).forEach(task => {
-    //             task.userId = task.userId === user.id ? null : task.userId;
-    //         });
-    //     }
-    // },
-    // fixBoardsStructure: board => {
-    //     if(board) {
-    //         db.Tasks.filter(task => task && task.boardId === board.id).forEach(
-    //             task => (db.Tasks[db.Tasks.indexOf(task)] = undefined)
-    //         );
-    //     }
-    // },
-    fixUsersStructure: () => {},
-    fixBoardsStructure: () => {},
-
-    fixTasksStructure: () => {}
 };
 
 (() => {
-    for(let i = 0; i < 3; i += 1) {
-        db.Users.push(new User());
-    }
+    db.Users.push(new User());
     const board = new Board();
-    db.Boards.push(board);
+    db.Boards.push(new Board());
     db.Tasks.push(
         new Task({ boardId: board.id }),
         new Task({ boardId: board.id })
