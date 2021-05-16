@@ -3,73 +3,95 @@ const Board = require('../resources/boards/board.model');
 const Task = require('../resources/tasks/task.model');
 
 const db = {
-    Users: [],
-    Boards: [],
-    Tasks: [],
+  Tasks: [],
+  Users: [],
+  Boards: [],
 };
 
 (() => {
+  for (let i = 0; i < 3; i += 1) {
     db.Users.push(new User());
-    const board = new Board();
-    db.Boards.push(new Board());
-    db.Tasks.push(
-        new Task({ boardId: board.id }),
-        new Task({ boardId: board.id })
-    );
+  }
+  const board = new Board();
+  db.Boards.push(board);
+  db.Tasks.push(new Task({ boardId: board.id }));
 })();
 
-const getAllEntities = tableName => db[tableName].filter(entity => entity);
+const getAllEntities = async (tableName) =>
+  db[tableName].filter((entity) => entity);
 
-const getEntity = (tableName, id) => {
-    const entities = db[tableName]
-        .filter(entity => entity)
-        .filter(entity => entity.id === id);
+const getUserEntities = async (tableName, props) => {
+  const keys = Object.keys(props);
 
-    if(entities.length > 1) {
-        console.error(
-            `The DB data is damaged. Table: ${tableName}. Entity ID: ${id}`
-        );
-        throw Error('The DB data is wrong!');
-    }
-
-    return entities[0];
+  return db[tableName].filter((entity) =>
+    keys.every((key) => props[key] === entity[key])
+  );
 };
 
-const removeEntity = (tableName, id) => {
-    const entity = getEntity(tableName, id);
-    if(entity) {
-        db[`fix${tableName}Structure`](entity);
-        const index = db[tableName].indexOf(entity);
-        db[tableName] = [
-            ...db[tableName].slice(0, index),
-            ...(db[tableName].length > index + 1
-                ? db[tableName].slice(index + 1)
-                : [])
-        ];
-    }
+const getEntity = async (tableName, id) => {
+  const entities = db[tableName].filter((entity) => id === entity.id);
 
-    return entity;
+  if (entities.length > 1) {
+    throw Error('The DB data is wrong!');
+  }
+
+  return entities[0];
 };
 
-const saveEntity = (tableName, entity) => {
-    db[tableName].push(entity);
+const deleteEntity = async (tableName, id) => {
+  const entity = await getEntity(tableName, id);
 
-    return getEntity(tableName, entity.id);
+  if (entity) {
+    db[tableName] = db[tableName].filter((ent) => ent !== entity);
+  }
+
+  return entity;
+};
+
+const createEntity = async (tableName, entity) => {
+  db[tableName].push(entity);
+
+  return getEntity(tableName, entity.id);
 };
 
 const updateEntity = async (tableName, id, entity) => {
-    const oldEntity = getEntity(tableName, id);
-    if(oldEntity) {
-        db[tableName][db[tableName].indexOf(oldEntity)] = {...entity};
-    }
+  const oldEntity = await getEntity(tableName, id);
 
-    return getEntity(tableName, id);
+  if (oldEntity) {
+    const entityIndex = db[tableName].indexOf(oldEntity);
+
+    db[tableName][entityIndex] = new oldEntity.constructor({
+      ...oldEntity,
+      ...entity,
+    });
+  }
+
+  return getEntity(tableName, id);
+};
+
+const getIdEntity = async (tableName, id, user) => {
+  const keys = Object.keys(user);
+
+  const entities = db[tableName].filter((entity) => {
+    const propCondition = keys.every((key) => user[key] === entity[key]);
+    const idCondition = entity.id === id;
+
+    return propCondition && idCondition;
+  });
+
+  if (entities.length > 1) {
+    throw new Error('Data corrupted! More than one id present!');
+  }
+
+  return entities[0];
 };
 
 module.exports = {
-    getAllEntities,
-    getEntity,
-    removeEntity,
-    saveEntity,
-    updateEntity
+  getAllEntities,
+  getEntity,
+  deleteEntity,
+  createEntity,
+  updateEntity,
+  getIdEntity,
+  getUserEntities,
 };

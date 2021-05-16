@@ -1,36 +1,68 @@
 const DB = require('../../utils/hardcodeDB');
+const Task = require('./task.model');
 
 const TABLE_NAME = 'Tasks';
 // const User = require('./user.model');
 
-const getAll = async () => DB.getAllEntities(TABLE_NAME);
+const getAll = async (boardId) =>
+  DB.getUserEntities(TABLE_NAME, { boardId });
 
-const get = async id => {
-  const user = await DB.getEntity(TABLE_NAME, id);
+const get = async (boardId, id) => {
+  const task = await DB.getIdEntity(TABLE_NAME, id, { boardId });
 
-  if(!user) {
-    throw new Error(`Couldn't find a user with id: ${id}`);
+  if (!task) {
+    throw new Error(
+      `Couldn't find a task with id: ${id} and boardId: ${boardId}`
+    );
   }
 
-  return user;
+  return task;
 };
 
-const remove = async id => {
-  if(!(await DB.removeEntity(TABLE_NAME, id))) {
-    throw new Error(`Couldn't find a user with id: ${id}`);
+const remove = async (boardId, id) => {
+  const removedTask = await DB.deleteEntity(TABLE_NAME, id);
+
+  if (!removedTask) {
+    throw new Error(`Couldn't find a task with id: ${id}`);
   }
 };
 
-const save = async user => DB.saveEntity(TABLE_NAME, user);
+const create = async (task) => DB.createEntity(TABLE_NAME, task);
 
-const update = async (id, user) => {
-  const entity = await DB.updateEntity(TABLE_NAME, id, user);
+const update = async (boardId, id, user) => {
+  const updatedTask = await DB.updateEntity(TABLE_NAME, id, user);
 
-  if(!entity) {
-    throw new Error(`Couldn't find a user with id: ${id}`);
+  if (!updatedTask) {
+    throw new Error(`Couldn't find a task with id: ${id}`);
   }
 
-  return user;
+  return updatedTask;
 };
 
-module.exports = { getAll, get, remove, save, update };
+const removeAll = async (boardId) => {
+  const removedTasks = await DB.getUserEntities(TABLE_NAME, { boardId });
+
+  removedTasks.forEach(async (task) => {
+    await remove(boardId, task.id);
+  });
+};
+
+const removeUser = async (userId) => {
+  const tasks = await DB.getAllEntities(TABLE_NAME);
+
+  tasks.forEach(async (task) => {
+    if (task.userId === userId) {
+      await update(task.boardId, task.id, new Task({ ...task, userId: null }));
+    }
+  });
+};
+
+module.exports = {
+  getAll,
+  get,
+  remove,
+  create,
+  update,
+  removeAll,
+  removeUser,
+};

@@ -2,43 +2,51 @@ const router = require('express').Router();
 const { OK, CREATED, NO_CONTENT } = require('http-status-codes');
 const Task = require('./task.model');
 const tasksRepo = require('./task.service');
-const wrapAsync = require('../../utils/wrapAsync');
+const catchError = require('../../utils/catchError');
 
-router.route('/:id/tasks').get(
-  wrapAsync(async (req, res) => {
-    const users = await tasksRepo.get(req.params.id);
-    await res.status(OK).json(users.map(Task.toResponse));
+router.route('/:boardId/tasks').get(
+  catchError(async (req, res) => {
+    const tasks = await tasksRepo.getAll(req.params.boardId);
+
+    res.status(OK).json(tasks.map(Task.toResponse));
   })
 );
 
-router.route('/:id').get(
-  wrapAsync(async (req, res) => {
-    const user = await tasksRepo.get(req.params.id);
-    res.status(OK).send(Task.toResponse(user));
+router.route('/:boardId/tasks/:id').get(
+  catchError(async (req, res) => {
+    const task = await tasksRepo.get(req.params.boardId, req.params.id);
+
+    res.status(OK).json(Task.toResponse(task));
   })
 );
 
-router.route('/:id').delete(
-  wrapAsync(async (req, res) => {
-    await tasksRepo.remove(req.params.id);
-    res.sendStatus(NO_CONTENT);
+router.route('/:boardId/tasks/:id').delete(
+  catchError(async (req, res) => {
+    await tasksRepo.remove(req.params.boardId, req.params.id);
+
+    res.status(NO_CONTENT);
+    // .sendStatus(NO_CONTENT);
   })
 );
 
-router.route('/:id/tasks').post(
-  wrapAsync(async (req, res) => {
-    const user = await tasksRepo.save(Task.fromRequest(req.body));
-    res.status(CREATED).send(Task.toResponse(user));
+router.route('/:boardId/tasks').post(
+  catchError(async (req, res) => {
+    const task = await tasksRepo.create(req.params.boardId, req.body);
+
+    // res.status(OK).send(board);
+    res.status(CREATED).json(Task.toResponse(task));
   })
 );
 
-router.route('/:id').put(
-  wrapAsync(async (req, res) => {
-    const user = await tasksRepo.update(
+router.route('/:boardId/tasks/:id').put(
+  catchError(async (req, res) => {
+    const task = await tasksRepo.update(
+      req.params.boardId,
       req.params.id,
-      Task.fromRequest(req.body)
+      req.body
     );
-    res.status(OK).send(Task.toResponse(user));
+
+    res.status(OK).json(Task.toResponse(task));
   })
 );
 
