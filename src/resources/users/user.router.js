@@ -8,28 +8,25 @@ router.route('/').get(
   catchError(async (req, res) => {
     const users = await userService.getAll();
 
-    await res
-      .status(OK)
-      .json(users.map(User.toResponse));
+    res.status(OK).json(users.map(User.toResponse));
   })
 );
 
 router.route('/:id').get(
   catchError(async (req, res) => {
-    const user = await userService.get(req.params.id);
+    const { id } = req.params;
+    const user = await userService.get(id);
 
-    res
-      .status(OK)
-      .send(User.toResponse(user));
+    res.status(OK).json(User.toResponse(user));
   })
 );
 
 router.route('/:id').delete(
   catchError(async (req, res) => {
-    await userService.remove(req.params.id);
+    const { id } = req.params;
+    await userService.remove(id);
 
-    res
-      .sendStatus(NO_CONTENT);
+    res.sendStatus(NO_CONTENT);
   })
 );
 
@@ -39,24 +36,22 @@ router.route('/').post(
 
     const user = await userService.create({ name, login, password });
 
-    res
-      .status(CREATED)
-      .send(User.toResponse(user));
+    res.status(CREATED).json(User.toResponse(user));
   })
 );
 
 router.route('/:id').put(
   catchError(async (req, res) => {
-    const { name, login, password } = req.body
+    const { id } = req.params;
+    const { name, login, password } = req.body;
 
-    const user = await userService.update(
-      req.params.id,
-      { name, login, password }
-    );
+    const user = await userService.update(id, {
+      name,
+      login,
+      password,
+    });
 
-    res
-      .status(OK)
-      .send(User.toResponse(user));
+    res.status(OK).json(User.toResponse(user));
   })
 );
 
