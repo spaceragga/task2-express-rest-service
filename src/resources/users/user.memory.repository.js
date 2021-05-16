@@ -1,7 +1,6 @@
 const DB = require('../../utils/hardcodeDB');
 
 const TABLE_NAME = 'Users';
-// const User = require('./user.model');
 
 const getAll = async () => DB.getAllEntities(TABLE_NAME);
 
@@ -16,12 +15,14 @@ const get = async id => {
 };
 
 const remove = async id => {
-  if(!(await DB.removeEntity(TABLE_NAME, id))) {
+  const user = await DB.deleteEntity(TABLE_NAME, id);
+
+  if (!user) {
     throw new Error(`Couldn't find a user with id: ${id}`);
   }
 };
 
-const save = async user => DB.saveEntity(TABLE_NAME, user);
+const create = async user => DB.createEntity(TABLE_NAME, user);
 
 const update = async (id, user) => {
   const entity = await DB.updateEntity(TABLE_NAME, id, user);
@@ -30,7 +31,7 @@ const update = async (id, user) => {
     throw new Error(`Couldn't find a user with id: ${id}`);
   }
 
-  return user;
+  return entity;
 };
 
-module.exports = { getAll, get, remove, save, update };
+module.exports = { getAll, get, remove, create, update };
