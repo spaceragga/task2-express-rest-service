@@ -15,7 +15,7 @@ const get = async (id) => {
 };
 
 const remove = async (id) => {
-  const board = await DB.deleteEntity(TABLE_NAME, id);
+  const board = DB.deleteEntity(TABLE_NAME, id);
 
   if (!board) {
     throw new Error(`Couldn't find a user with id: ${id}`);
