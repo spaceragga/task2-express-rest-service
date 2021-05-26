@@ -1,50 +1,54 @@
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 const { OK, CREATED, NO_CONTENT } = require('http-status-codes');
 const Task = require('./task.model');
 const tasksRepo = require('./task.service');
 const catchError = require('../../utils/catchError');
 
-router.route('/:boardId/tasks').get(
+router.route('/').get(
   catchError(async (req, res) => {
-    const tasks = await tasksRepo.getAll(req.params.boardId);
-
+    const tasks = await tasksRepo.getAll();
     res.status(OK).json(tasks.map(Task.toResponse));
   })
 );
 
-router.route('/:boardId/tasks/:id').get(
+router.route('/:id').get(
   catchError(async (req, res) => {
-    const task = await tasksRepo.get(req.params.boardId, req.params.id);
+    const { id } = req.params;
 
+    const task = await tasksRepo.get(id);
     res.status(OK).json(Task.toResponse(task));
   })
 );
 
-router.route('/:boardId/tasks/:id').delete(
+router.route('/:id').delete(
   catchError(async (req, res) => {
-    await tasksRepo.remove(req.params.boardId, req.params.id);
+    const { id } = req.params;
 
-    res.status(NO_CONTENT);
-    // .sendStatus(NO_CONTENT);
+    await tasksRepo.remove(id);
+    res.status(NO_CONTENT).send('The task is deleted');
   })
 );
 
-router.route('/:boardId/tasks').post(
+router.route('/').post(
   catchError(async (req, res) => {
-    const task = await tasksRepo.create(req.params.boardId, req.body);
+    const { boardId } = req.params;
+    const { title, order, description, userId, columnId } = req.body;
 
-    // res.status(OK).send(board);
+    const task = await tasksRepo.create({
+      title,
+      order,
+      description,
+      userId,
+      boardId,
+      columnId,
+    });
     res.status(CREATED).json(Task.toResponse(task));
   })
 );
 
-router.route('/:boardId/tasks/:id').put(
+router.route('/:id').put(
   catchError(async (req, res) => {
-    const task = await tasksRepo.update(
-      req.params.boardId,
-      req.params.id,
-      req.body
-    );
+    const task = await tasksRepo.update(req.params.id, req.body);
 
     res.status(OK).json(Task.toResponse(task));
   })
