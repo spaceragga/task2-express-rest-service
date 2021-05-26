@@ -1,5 +1,8 @@
 const uuid = require('uuid').v4;
-
+/**
+ * Creates a new Board.
+ * @class {Object} Board in db
+ */
 class Board {
   constructor({
     id = uuid(),

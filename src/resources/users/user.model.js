@@ -1,5 +1,8 @@
 const uuid = require('uuid').v4;
-
+/**
+ * Creates a new User.
+ * @class {Object} User in db
+ */
 class User {
   constructor({
     id = uuid(),
