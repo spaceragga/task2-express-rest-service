@@ -5,7 +5,7 @@ const catchError = require('../../utils/catchError');
 
 router.route('/').get(
   catchError(async (req, res) => {
-    const boards = await boardsRepo.getAll();
+    const boards = await boardsRepo.getAllBoard();
 
     res
       .status(OK)
@@ -17,7 +17,7 @@ router.route('/:id').get(
   catchError(async (req, res) => {
     const { id } = req.params;
 
-    const board = await boardsRepo.get(id);
+    const board = await boardsRepo.getBoard(id);
 
     res
       .status(OK)
@@ -27,7 +27,7 @@ router.route('/:id').get(
 
 router.route('/:id').delete(
   catchError(async (req, res) => {
-    await boardsRepo.remove(req.params.id);
+    await boardsRepo.removeBoard(req.params.id);
 
     res
       .sendStatus(NO_CONTENT);
@@ -36,7 +36,7 @@ router.route('/:id').delete(
 
 router.route('/').post(
   catchError(async (req, res) => {
-    const board = await boardsRepo.create(req.body);
+    const board = await boardsRepo.createBoard(req.body);
 
     res
       .status(CREATED)
@@ -48,7 +48,7 @@ router.route('/:id').put(
   catchError(async (req, res) => {
     const { id } = req.params;
 
-    const board = await boardsRepo.update(id, req.body);
+    const board = await boardsRepo.updateBoard(id, req.body);
 
     res
       .status(OK)
