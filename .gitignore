@@ -5,3 +5,6 @@ node_modules
 
 # JSDoc generated files
 docs/
+
+# TS compil files
+build/
