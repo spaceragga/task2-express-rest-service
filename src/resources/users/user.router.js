@@ -6,7 +6,7 @@ const catchError = require('../../utils/catchError');
 
 router.route('/').get(
   catchError(async (req, res) => {
-    const users = await userService.getAll();
+    const users = await userService.getAllUser();
 
     res.status(OK).json(users.map(User.toResponse));
   })
@@ -15,7 +15,7 @@ router.route('/').get(
 router.route('/:id').get(
   catchError(async (req, res) => {
     const { id } = req.params;
-    const user = await userService.get(id);
+    const user = await userService.getUser(id);
 
     res.status(OK).json(User.toResponse(user));
   })
@@ -24,7 +24,7 @@ router.route('/:id').get(
 router.route('/:id').delete(
   catchError(async (req, res) => {
     const { id } = req.params;
-    await userService.remove(id);
+    await userService.removeUser(id);
 
     res.sendStatus(NO_CONTENT);
   })
@@ -34,7 +34,7 @@ router.route('/').post(
   catchError(async (req, res) => {
     const { name, login, password } = req.body;
 
-    const user = await userService.create({ name, login, password });
+    const user = await userService.createUser({ name, login, password });
 
     res.status(CREATED).json(User.toResponse(user));
   })
@@ -45,7 +45,7 @@ router.route('/:id').put(
     const { id } = req.params;
     const { name, login, password } = req.body;
 
-    const user = await userService.update(id, {
+    const user = await userService.updateUser(id, {
       name,
       login,
       password,

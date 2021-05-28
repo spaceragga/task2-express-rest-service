@@ -3,15 +3,15 @@ const DB = require('../../utils/hardcodeDB');
 const TABLE_NAME = 'Users';
 /**
  * Getting entries from a table Users
- * @returns {Object[]} get all users
+ * @returns {Promise<Object[]>} get promise all users
  */
-const getAll = async () => DB.getAllEntities(TABLE_NAME);
+const getAllUserDB = async () => DB.getAllEntities(TABLE_NAME);
 /**
  * Getting entry from a table Users
  * @param {String} id User id
- * @returns {Object} get a User by id
+ * @returns {Promise<object>} get promise a User by id
  */
-const get = async (id) => {
+const getUserDB = async (id) => {
   const user = await DB.getEntity(TABLE_NAME, id);
 
   if (!user) {
@@ -23,9 +23,9 @@ const get = async (id) => {
 /**
  * Remove entry from a table Users
  * @param {String} id User id
- * @returns {void} return undefined
+ * @returns {Promise<void>} return promise undefined
  */
-const remove = async (id) => {
+const removeUserDB = async (id) => {
   const user = DB.deleteEntity(TABLE_NAME, id);
 
   if (!user) {
@@ -35,16 +35,16 @@ const remove = async (id) => {
 /**
  * Create entry in table Users
  * @param {Object} user set data
- * @returns {Object} return object
+ * @returns {Promise<object>} return promise object
  */
-const create = async (user) => DB.createEntity(TABLE_NAME, user);
+const createUserDB = async (user) => DB.createEntity(TABLE_NAME, user);
 /**
  * Update entry in table Users
  * @param {String} id User id
  * @param {Object} user some data
- * @returns {Object} return object
+ * @returns {Promise<object>} return promise object
  */
-const update = async (id, user) => {
+const updateUserDB = async (id, user) => {
   const entity = await DB.updateEntity(TABLE_NAME, id, user);
 
   if (!entity) {
@@ -54,4 +54,4 @@ const update = async (id, user) => {
   return entity;
 };
 
-module.exports = { getAll, get, remove, create, update };
+module.exports = { getAllUserDB, getUserDB, removeUserDB, createUserDB, updateUserDB };
