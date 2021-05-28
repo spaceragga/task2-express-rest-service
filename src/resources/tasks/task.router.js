@@ -6,7 +6,7 @@ const catchError = require('../../utils/catchError');
 
 router.route('/').get(
   catchError(async (req, res) => {
-    const tasks = await tasksRepo.getAll();
+    const tasks = await tasksRepo.getAllTask();
     res.status(OK).json(tasks.map(Task.toResponse));
   })
 );
@@ -15,7 +15,7 @@ router.route('/:id').get(
   catchError(async (req, res) => {
     const { id } = req.params;
 
-    const task = await tasksRepo.get(id);
+    const task = await tasksRepo.getTask(id);
     res.status(OK).json(Task.toResponse(task));
   })
 );
@@ -24,7 +24,7 @@ router.route('/:id').delete(
   catchError(async (req, res) => {
     const { id } = req.params;
 
-    await tasksRepo.remove(id);
+    await tasksRepo.removeTask(id);
     res.status(NO_CONTENT).send('The task is deleted');
   })
 );
@@ -34,7 +34,7 @@ router.route('/').post(
     const { boardId } = req.params;
     const { title, order, description, userId, columnId } = req.body;
 
-    const task = await tasksRepo.create({
+    const task = await tasksRepo.createTask({
       title,
       order,
       description,
@@ -48,7 +48,7 @@ router.route('/').post(
 
 router.route('/:id').put(
   catchError(async (req, res) => {
-    const task = await tasksRepo.update(req.params.id, req.body);
+    const task = await tasksRepo.updateTask(req.params.id, req.body);
 
     res.status(OK).json(Task.toResponse(task));
   })

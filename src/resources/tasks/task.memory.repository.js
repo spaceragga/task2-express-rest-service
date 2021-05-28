@@ -3,15 +3,15 @@ const DB = require('../../utils/hardcodeDB');
 const TABLE_NAME = 'Tasks';
 /**
  * Getting entries from a table Tasks
- * @returns {Object[]} get all tasks
+ * @returns {Promise<object[]>} get promise all tasks
  */
-const getAll = async () => DB.getAllEntities(TABLE_NAME);
+const getAllTaskDB = async () => DB.getAllEntities(TABLE_NAME);
 /**
  * Getting entry from a table Tasks
  * @param {String} id Task id
- * @returns {Object} get a Task by id
+ * @returns {Promise<object>} get promise a Task by id
  */
-const get = async (id) => {
+const getTaskDB = async (id) => {
   const task = await DB.getEntity(TABLE_NAME, id);
 
   if (!task) {
@@ -23,9 +23,9 @@ const get = async (id) => {
 /**
  * Remove entry from a table Tasks
  * @param {String} id Task id
- * @returns {void} return undefined
+ * @returns {Promise<void>} return promise undefined
  */
-const remove = async (id) => {
+const removeTaskDB = async (id) => {
   const removedTask = DB.deleteEntity(TABLE_NAME, id);
 
   if (!removedTask) {
@@ -35,16 +35,16 @@ const remove = async (id) => {
 /**
  * Create entry in table Tasks
  * @param {Object} task set data
- * @returns {Object} return object
+ * @returns {Promise<object>} return promise object
  */
-const create = async (task) => DB.createEntity(TABLE_NAME, task);
+const createTaskDB = async (task) => DB.createEntity(TABLE_NAME, task);
 /**
  * Update entry in table Tasks
  * @param {String} id Task id
  * @param {Object} user some data
- * @returns {Object} return object
+ * @returns {Promise<object>} return promise object
  */
-const update = async (id, user) => {
+const updateTaskDB = async (id, user) => {
   const updatedTask = await DB.updateEntity(TABLE_NAME, id, user);
 
   if (!updatedTask) {
@@ -54,4 +54,4 @@ const update = async (id, user) => {
   return updatedTask;
 };
 
-module.exports = { getAll, get, create, update, remove };
+module.exports = { getAllTaskDB, getTaskDB, removeTaskDB, createTaskDB, updateTaskDB };
