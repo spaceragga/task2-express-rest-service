@@ -1,10 +1,10 @@
-const uuid = require('uuid').v4;
+const uuidTask = require('uuid').v4;
 /**
  * Creates a new Task.
  * @class {Object} Task in db
  */
 class Task {
-    /**
+  /**
    *
    * @param id {string} Id of a task
    * @param title {string} Title of a task
@@ -14,8 +14,15 @@ class Task {
    * @param boardId {string|Null} Id of a board
    * @param columnId {string|Null} Id of a column
    */
+  id: string;
+  title: string;
+  order: number;
+  description: string;
+  userId: null | string;
+  boardId: null | string;
+  columnId: null | string;
   constructor({
-    id = uuid(),
+    id = uuidTask(),
     title = 'TITLE',
     order = 0,
     description = 'DESCRIPTION',
@@ -23,7 +30,7 @@ class Task {
     boardId = null,
     columnId = null,
   } = {}) {
-        /**
+    /**
      *
      * @property id {string} Id of a task
      * @property title {string} Title of a task
@@ -41,14 +48,14 @@ class Task {
     this.boardId = boardId;
     this.columnId = columnId;
   }
-    /**
+  /**
    * static returns only valid properties
    * @static
    * @param user {Object} task object
    * @returns {Object} return object task
    */
 
-  static toResponse(task) {
+  static toResponse(task: object) {
     return { ...task };
   }
 }
