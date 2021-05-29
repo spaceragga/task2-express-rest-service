@@ -1,4 +1,4 @@
-const uuid = require('uuid').v4;
+const uuidUser = require('uuid').v4;
 /**
  * Creates a new User.
  * @class {Object} User in db
@@ -10,8 +10,12 @@ class User {
    * @param login {string} login of a user
    * @param password {string} password of a user
    */
+  id: string;
+  name: string;
+  login: string;
+  password: string;
   constructor({
-    id = uuid(),
+    id = uuidUser(),
     name = 'USER',
     login = 'user',
     password = 'P@55w0rd',
@@ -33,8 +37,8 @@ class User {
    * @param user {Object} User object
    * @returns {{name, id, login}} Name, Id and login of a user
    */
-  
-  static toResponse(user) {
+
+  static toResponse(user: { id: string; name: string; login: string }) {
     const { id, name, login } = user;
     return { id, name, login };
   }

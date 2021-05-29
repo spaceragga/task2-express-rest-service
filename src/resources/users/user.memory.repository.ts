@@ -1,18 +1,19 @@
-const DB = require('../../utils/hardcodeDB');
+const userDB = require('../../utils/hardcodeDB');
 
-const TABLE_NAME = 'Users';
+const TABLE_NAME_USER = 'users';
 /**
  * Getting entries from a table Users
  * @returns {Promise<Object[]>} get promise all users
  */
-const getAllUserDB = async () => DB.getAllEntities(TABLE_NAME);
+const getAllUserDB = async (): Promise<object[]> =>
+  userDB.getAllEntities(TABLE_NAME_USER);
 /**
  * Getting entry from a table Users
  * @param {String} id User id
  * @returns {Promise<object>} get promise a User by id
  */
-const getUserDB = async (id) => {
-  const user = await DB.getEntity(TABLE_NAME, id);
+const getUserDB = async (id: string): Promise<object> => {
+  const user = await userDB.getEntity(TABLE_NAME_USER, id);
 
   if (!user) {
     throw new Error(`Couldn't find a user with id: ${id}`);
@@ -25,8 +26,8 @@ const getUserDB = async (id) => {
  * @param {String} id User id
  * @returns {Promise<void>} return promise undefined
  */
-const removeUserDB = async (id) => {
-  const user = DB.deleteEntity(TABLE_NAME, id);
+const removeUserDB = async (id: string): Promise<void> => {
+  const user = userDB.deleteEntity(TABLE_NAME_USER, id);
 
   if (!user) {
     throw new Error(`Couldn't find a user with id: ${id}`);
@@ -37,15 +38,16 @@ const removeUserDB = async (id) => {
  * @param {Object} user set data
  * @returns {Promise<object>} return promise object
  */
-const createUserDB = async (user) => DB.createEntity(TABLE_NAME, user);
+const createUserDB = async (user: object): Promise<object> =>
+  userDB.createEntity(TABLE_NAME_USER, user);
 /**
  * Update entry in table Users
  * @param {String} id User id
  * @param {Object} user some data
  * @returns {Promise<object>} return promise object
  */
-const updateUserDB = async (id, user) => {
-  const entity = await DB.updateEntity(TABLE_NAME, id, user);
+const updateUserDB = async (id: string, user: object): Promise<object> => {
+  const entity = await userDB.updateEntity(TABLE_NAME_USER, id, user);
 
   if (!entity) {
     throw new Error(`Couldn't find a user with id: ${id}`);
@@ -54,4 +56,10 @@ const updateUserDB = async (id, user) => {
   return entity;
 };
 
-module.exports = { getAllUserDB, getUserDB, removeUserDB, createUserDB, updateUserDB };
+module.exports = {
+  getAllUserDB,
+  getUserDB,
+  removeUserDB,
+  createUserDB,
+  updateUserDB,
+};
