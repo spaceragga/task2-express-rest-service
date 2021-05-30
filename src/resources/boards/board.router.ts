@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+
 const router = require('express').Router();
 const { OK, CREATED, NO_CONTENT } = require('http-status-codes');
 const boardsRepo = require('./board.service');

@@ -11,9 +11,13 @@ class User {
    * @param password {string} password of a user
    */
   id: string;
+
   name: string;
+
   login: string;
+
   password: string;
+
   constructor({
     id = uuidUser(),
     name = 'USER',

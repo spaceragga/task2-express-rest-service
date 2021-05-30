@@ -15,12 +15,19 @@ class Task {
    * @param columnId {string|Null} Id of a column
    */
   id: string;
+
   title: string;
+
   order: number;
+
   description: string;
+
   userId: null | string;
+
   boardId: null | string;
+
   columnId: null | string;
+
   constructor({
     id = uuidTask(),
     title = 'TITLE',

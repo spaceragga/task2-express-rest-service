@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import HttpException from '../exceptions/HttpException';
+
 const { NOT_FOUND } = require('http-status-codes');
 /**
  * Wrapper for catch app.js errors

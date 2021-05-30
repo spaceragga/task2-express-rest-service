@@ -10,8 +10,11 @@ class Board {
    * @param columns {Array} columns of a board
    */
   id: string;
+
   title: string;
+
   columns: { id: string; title: string; order: number }[];
+
   constructor({
     id = uuidBoard(),
     title = 'TITLE',

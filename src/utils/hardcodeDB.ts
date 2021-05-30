@@ -96,23 +96,23 @@ const deleteEntity = async (
 ): Promise<void> => {
   switch (tableName) {
     case 'users':
-      db[tableName] = db[tableName].filter((entity) => entity['id'] !== id);
+      db[tableName] = db[tableName].filter((entity) => entity.id !== id);
       db.tasks = db.tasks.map((entity) => {
         const oldEntity = entity;
-        if (oldEntity['userId'] === id) {
-          oldEntity['userId'] = null;
+        if (oldEntity.userId === id) {
+          oldEntity.userId = null;
         }
         return oldEntity;
       });
       break;
 
     case 'boards':
-      db[tableName] = db[tableName].filter((entity) => entity['id'] !== id);
-      db.tasks = db.tasks.filter((entity) => entity['boardId'] !== id);
+      db[tableName] = db[tableName].filter((entity) => entity.id !== id);
+      db.tasks = db.tasks.filter((entity) => entity.boardId !== id);
       break;
 
     case 'tasks':
-      db[tableName] = db[tableName].filter((entity) => entity['id'] !== id);
+      db[tableName] = db[tableName].filter((entity) => entity.id !== id);
       break;
 
     default:
