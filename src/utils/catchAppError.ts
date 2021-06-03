@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import HttpException from '../exceptions/HttpException';
 
-const { NOT_FOUND } = require('http-status-codes');
+const { INTERNAL_SERVER_ERROR, getStatusText } = require('http-status-codes');
+const { logger } = require('../logger/logger');
+
 /**
  * Wrapper for catch app.js errors
  * @param {Error} err - Express catch error
@@ -11,11 +13,15 @@ const { NOT_FOUND } = require('http-status-codes');
  * @returns {Function} return catch status code
  */
 const catchAppError = (err: HttpException, _req: Request, res: Response, next: NextFunction) => {
-    if (err.code === 'ERR_ENTITY_NOT_FOUND') {
-      res.status(NOT_FOUND).send('Something failed')
-    } else {
-      next(err);
-    }
+  if (err.status) {
+    res.status(err.status).send(err.message);
+  } else {
+    logger.error(err.stack);
+    res
+      .status(INTERNAL_SERVER_ERROR)
+      .send(getStatusText(INTERNAL_SERVER_ERROR));
+  }
+  next();
   };
   
   module.exports = catchAppError;
