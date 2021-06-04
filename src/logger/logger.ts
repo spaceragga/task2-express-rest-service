@@ -1,15 +1,21 @@
-// import { json } from "express";
+import { Request } from 'express';
+
 const morgan = require('morgan');
 const { format, createLogger, transports } = require('winston');
 
-const { combine, label, colorize } = format;
+const { combine, label, colorize, printf } = format;
+interface IPrint {
+  message: string;
+  timestamp: string;
+  stack: string;
+}
 
-const myFormat = format.printf(
-  ({ message, timestamp, stack }: any) => `${timestamp} ${stack || message}`
+const myFormat = printf(
+  ({ message, timestamp, stack }: IPrint) => `${timestamp} ${stack || message}`
 );
 
-morgan.token('body', (req: { body: any; }) => JSON.stringify(req.body));
-morgan.token('query', (req: { query: any; }) => JSON.stringify(req.query));
+morgan.token('body', (req: Request) => JSON.stringify(req.body));
+morgan.token('query', (req: Request) => JSON.stringify(req.query));
 
 const logger = createLogger({
   format: combine(
@@ -25,23 +31,32 @@ const logger = createLogger({
   transports: [
     new transports.Console(),
     new transports.File({
-      filename: 'error.log',
       level: 'error',
+      filename: 'error.log',
       prettyPrint: true,
-      format: format.combine(format.uncolorize(), format.json(),     myFormat
-      ),
+      format: format.combine(format.uncolorize(), format.json(), myFormat),
     }),
     new transports.File({
-      filename: 'info.log',
       level: 'info',
-      format: format.combine(format.uncolorize(), format.json(),     myFormat
-      ),
+      filename: 'info.log',
+      format: format.combine(format.uncolorize(), format.json(), myFormat),
+    }),
+  ],
+  exceptionHandlers: [
+    new transports.File({
+      level: 'debug',
+      filename: 'exceptions.log',
+      prettyPrint: true,
+      handleExceptions: true,
+      humanReadableUnhandledException:true,
+      format: format.combine(format.uncolorize(), format.json(), myFormat),
     }),
   ],
 });
 
 const myStream = {
-  write: (msg: string) => logger.info(msg)
-}
+  write: (msg: string) => logger.info(msg),
+};
+
 
 module.exports = { logger, myStream };

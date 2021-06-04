@@ -6,7 +6,7 @@ const path = require('path');
 const YAML = require('yamljs');
 const morgan = require('morgan');
 const catchAppError = require('./utils/catchAppError');
-const logger = require('./logger/logger');
+const { logger, myStream } = require('./logger/logger');
 
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
@@ -31,7 +31,7 @@ app.use(
   morgan(
     ':method :status :url :query Body :body size :res[content-length] - :response-time ms',
     {
-      stream: logger.myStream,
+      stream: myStream,
     }
   )
 );
@@ -40,5 +40,15 @@ app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 boardRouter.use('/:boardId/tasks', taskRouter);
 app.use(catchAppError);
+
+// process.on('uncaughtException', (err) => {
+//   logger.info('uncaughtException', { message: err.message, stack: err.stack });
+//   process.exit(1);
+// });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+process.on('unhandledRejection', (err: any) => {
+  logger.info(err.stack);
+    process.exit(1);
+});
 
 module.exports = app;
