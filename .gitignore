@@ -8,3 +8,6 @@ docs/
 
 # TS compil files
 build/
+
+# ignore .log file
+info.log

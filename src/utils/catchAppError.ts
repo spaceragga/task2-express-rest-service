@@ -4,6 +4,11 @@ import HttpException from '../exceptions/HttpException';
 const { INTERNAL_SERVER_ERROR, getStatusText } = require('http-status-codes');
 const { logger } = require('../logger/logger');
 
+process.on('uncaughtException', (err: HttpException) => {
+  logger.info(err.stack);
+  process.exit(1);
+});
+
 process.on('unhandledRejection', (err: HttpException) => {
   logger.info(err.stack);
   process.exit(1);
