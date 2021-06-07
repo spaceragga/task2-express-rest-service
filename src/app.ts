@@ -1,7 +1,11 @@
+import { Request, Response, NextFunction } from 'express';
+
 const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
+const catchAppError = require('./utils/catchAppError');
+
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
@@ -13,7 +17,7 @@ app.use(express.json());
 
 app.use('/doc', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
-app.use('/', (req, res, next) => {
+app.use('/', (req: Request, res: Response, next: NextFunction) => {
   if (req.originalUrl === '/') {
     res.send('Service is running!');
     return;
@@ -22,9 +26,8 @@ app.use('/', (req, res, next) => {
 });
 
 app.use('/users', userRouter);
-
 app.use('/boards', boardRouter);
-
-app.use('/boards', taskRouter);
+boardRouter.use('/:boardId/tasks', taskRouter);
+app.use(catchAppError);
 
 module.exports = app;

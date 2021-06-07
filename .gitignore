@@ -1,1 +1,10 @@
 node_modules
+
+# IDEs and editors
+.history/
+
+# JSDoc generated files
+docs/
+
+# TS compil files
+build/
