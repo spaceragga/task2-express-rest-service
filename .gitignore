@@ -10,4 +10,4 @@ docs/
 build/
 
 # ignore .log file
-info.log
+logs/
