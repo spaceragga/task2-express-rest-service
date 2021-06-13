@@ -3,7 +3,7 @@ version: '3.4'
 services:
     node:
       build: .
-      restart: always
+      restart: on-failure
       ports:
         - ${PORT}:${PORT}
       volumes:
@@ -17,11 +17,13 @@ services:
         - my-net
     postgres:
       build: ./database/
-      restart: always
+      restart: on-failure
       networks:
         - my-net
       ports:
         - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      volumes:
+        - ./database:/usr/src/app/database
       environment: 
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}

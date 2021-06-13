@@ -1,5 +1,31 @@
 # RS School REST service
 
+## Work with docker
+
+- Create two images for work with docker container:
+1. Easy way:
+```
+$ docker-compose build
+```
+
+2. Custom way:
+```
+$ docker build . -t spaceragga/docker-basics-node
+```
+```
+$ docker build ./database -t spaceragga/docker-basics-postgres
+```
+
+- Run containers in one network:
+```
+$ docker-compose up
+```
+
+- Stop containers:
+```
+$ docker-compose down
+```
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
