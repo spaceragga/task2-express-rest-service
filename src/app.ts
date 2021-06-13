@@ -4,7 +4,9 @@ const express = require('express');
 const swaggerUI = require('swagger-ui-express');
 const path = require('path');
 const YAML = require('yamljs');
+const morgan = require('morgan');
 const catchAppError = require('./utils/catchAppError');
+const { myStream } = require('./logger/logger');
 
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
@@ -24,6 +26,15 @@ app.use('/', (req: Request, res: Response, next: NextFunction) => {
   }
   next();
 });
+
+app.use(
+  morgan(
+    ':method :status :url Query :query Body :body size :res[content-length] - :response-time ms',
+    {
+      stream: myStream,
+    }
+  )
+);
 
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);

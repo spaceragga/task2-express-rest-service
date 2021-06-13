@@ -13,6 +13,13 @@ router.route('/').get(
     res.status(OK).json(users.map(User.toResponse));
   })
 );
+router.route('/error').get(() => {
+  throw new Error("Oops it's uncaughtException!");
+});
+
+router.route('/errorpr').get(() => {
+  Promise.reject(Error("Oops it's unhandledRejection!"));
+});
 
 router.route('/:id').get(
   catchError(async (req: Request, res: Response) => {
