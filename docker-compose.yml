@@ -1,38 +1,58 @@
 version: '3.4'
 
 services:
-    node:
-      build: .
-      restart: on-failure
-      ports:
-        - ${PORT}:${PORT}
-      volumes:
-        - ./logs:/usr/src/logs
-        - ./src:/usr/src/src
-      depends_on:
-        - postgres
-      environment:
-        - PORT=${PORT}
-      networks:
-        - my-net
-    postgres:
-      build: ./database/
-      restart: on-failure
-      networks:
-        - my-net
-      ports:
-        - ${POSTGRES_PORT}:${POSTGRES_PORT}
-      volumes:
-        # - ./database:/usr/src/app/database
-        - ./database:/var/lib/postgresql/data
-      environment: 
-        POSTGRES_HOST: ${POSTGRES_HOST}
-        POSTGRES_PORT: ${POSTGRES_PORT}
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_DB: ${POSTGRES_DB}
-        PGDATA: ${PGDATA}
+  node:
+    build: .
+    restart: on-failure
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./logs:/usr/src/logs
+      - ./src:/usr/src/src
+    depends_on:
+      - postgres
+    environment:
+      - PORT=${PORT}
+    networks:
+      - my-net
+  postgres:
+    build: ./database/
+    restart: on-failure
+    networks:
+      - my-net
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      # - ./database:/usr/src/app/database
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      # PGDATA: ${PGDATA}
+
+  pgadmin:
+    # container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - my-net
 
 networks:
   my-net:
     driver: bridge
+
+volumes:
+  pgdata:
+  pgadmin:
