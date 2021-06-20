@@ -29,7 +29,7 @@ const removeUserDB = async (id: string): Promise<void> => {
   }
 };
 
-const createUserDB = async (user: any): Promise<typeof User> => {
+const createUserDB = async (user: typeof User): Promise<typeof User> => {
   const studentRepository = getRepository(User);
   const newUser = await studentRepository.create(user);
   const savedUser = await studentRepository.save(newUser);

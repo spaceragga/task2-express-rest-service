@@ -27,7 +27,7 @@ const removeTaskDB = async (id: string): Promise<void> => {
   }
 };
 
-const createTaskDB = async (task: any): Promise<typeof Task> => {
+const createTaskDB = async (task: typeof Task): Promise<typeof Task> => {
   const taskRepository = getRepository(Task);
   const taskDB = taskRepository.create(task);
   return taskRepository.save(taskDB);
@@ -40,7 +40,7 @@ const updateTaskDB = async (id: string, user: object): Promise<object> => {
   if (!taskDB) {
     throw new Error(`Couldn't find a task with id: ${id}`);
   }
-  
+
   const updatedTask = await taskRepository.update(id, user);
 
   return updatedTask;

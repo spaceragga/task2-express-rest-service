@@ -31,7 +31,7 @@ const removeBoardDB = async (id: string): Promise<void> => {
   await taskRepository.update({ boardId: id }, { boardId: null });
 };
 
-const createBoardDB = async (board: any): Promise<object> => {
+const createBoardDB = async (board: typeof Board): Promise<object> => {
   const boardRepository = getRepository(Board);
 
   const columns = await Promise.all(board.columns?.map(Column.create) || []);
@@ -41,7 +41,7 @@ const createBoardDB = async (board: any): Promise<object> => {
   return boardDB;
 };
 
-const updateBoardDB = async (id: string, user: any): Promise<typeof Board> => {
+const updateBoardDB = async (id: string, user: typeof Board): Promise<typeof Board> => {
   const boardRepository = getRepository(Board);
 
   const columns = await Promise.all(user.columns?.map(Column.create) || []);
