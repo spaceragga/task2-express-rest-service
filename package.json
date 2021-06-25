@@ -17,11 +17,11 @@
     "test:auth": "cross-env DEBUG=rs:* TEST_MODE=auth jest --noStackTrace",
     "docs": "jsdoc -c ./.jsdoc.conf.json",
     "docts": "tsc && jsdoc -c ./.jsdoc.conf.json",
-    "dev": "nodemon -L --watch '**/*.ts' --exec 'ts-node' src/server.ts --exitcrash",
+    "dev": "nodemon -L src/server.ts --exitcrash",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f src/common/ormconfig.ts",
-    "migration:create": "npm run typeorm:cli migration:create -- -n task7",
-    "migration:run": "npm run typeorm:cli migration:run -- -n task7"
+    "migration:create": "npm run typeorm migration:generate -- -n migration --config src/common/ormconfig.ts",
+    "migration:run": "npm run typeorm migration:run"
   },
   "keywords": [
     "rs",
