@@ -11,6 +11,9 @@ const { myStream } = require('./logger/logger');
 const userRouter = require('./resources/users/user.router');
 const boardRouter = require('./resources/boards/board.router');
 const taskRouter = require('./resources/tasks/task.router');
+const usersRouter = require('./auth/usersRouter');
+const loginRouter = require('./auth/loginRouter');
+const checkToken = require('./auth/checkToken');
 
 const app: Application = express();
 const swaggerDocument = YAML.load(path.join(__dirname, '../doc/api.yaml'));
@@ -39,6 +42,8 @@ app.use(
 app.use('/users', userRouter);
 app.use('/boards', boardRouter);
 boardRouter.use('/:boardId/tasks', taskRouter);
+app.use('/userslog', checkToken, usersRouter);
+app.use('/login', loginRouter);
 app.use(catchAppError);
 
 module.exports = app;
