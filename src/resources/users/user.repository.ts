@@ -1,17 +1,16 @@
 import { getRepository } from 'typeorm';
-// const userDB = require('../../utils/hardcodeDB');
+
 const User = require('./user.entity');
 
-// const TABLE_NAME_USER = 'users';
 
 const getAllUserDB = async (): Promise<typeof User[]> => {
-  const studentRepository = getRepository(User);
-  return studentRepository.find({ where: {} });
+  const userRepository = getRepository(User);
+  return userRepository.find({ where: {} });
 };
 
 const getUserDB = async (id: string): Promise<typeof User> => {
-  const studentRepository = getRepository(User);
-  const user = await studentRepository.findOne(id);
+  const userRepository = getRepository(User);
+  const user = await userRepository.findOne(id);
 
   if (!user) {
     throw new Error(`Couldn't find a user with id: ${id}`);
@@ -21,8 +20,8 @@ const getUserDB = async (id: string): Promise<typeof User> => {
 };
 
 const removeUserDB = async (id: string): Promise<void> => {
-  const studentRepository = getRepository(User);
-  const deleteUser = await studentRepository.delete(id);
+  const userRepository = getRepository(User);
+  const deleteUser = await userRepository.delete({ id });
 
   if (!deleteUser) {
     throw new Error(`Couldn't find a user with id: ${id}`);
@@ -30,23 +29,23 @@ const removeUserDB = async (id: string): Promise<void> => {
 };
 
 const createUserDB = async (user: typeof User): Promise<typeof User> => {
-  const studentRepository = getRepository(User);
-  const newUser = await studentRepository.create(user);
-  const savedUser = await studentRepository.save(newUser);
-  return savedUser;
+  const userRepository = getRepository(User);
+  const newUser: typeof User = await userRepository.create(user);
+  await userRepository.save(newUser);
+  return getUserDB(newUser.id);
 };
 
 const updateUserDB = async (id: string, user: object): Promise<object> => {
-  const studentRepository = getRepository(User);
-  const userDB = await studentRepository.findOne(id);
+  const userRepository = getRepository(User);
+  const userDB = await userRepository.findOne(id);
 
   if (!userDB) {
     throw new Error(`Couldn't find a user with id: ${id}`);
   }
 
-  const updateUser = await studentRepository.update(id, user);
+  await userRepository.update(id, user);
 
-  return updateUser;
+  return getUserDB(id);
 };
 
 module.exports = {

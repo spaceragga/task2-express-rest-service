@@ -1,4 +1,3 @@
-const UserModel = require('./user.entity');
 const usersRepo = require('./user.repository');
 /**
  * Service for getting all Users
@@ -23,7 +22,7 @@ const removeUser = (id: string): (() => void) => usersRepo.removeUserDB(id);
  * @returns {function(): Object} the returned Object
  */
 const createUser = (user: object): (() => Object) =>
-  usersRepo.createUserDB(new UserModel(user));
+  usersRepo.createUserDB(user);
 /**
  * Service for update User by id
  * @param {String} id User id

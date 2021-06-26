@@ -1,19 +1,17 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
-
-const uuidUser = require('uuid').v4;
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'users' })
 class User {
-  @PrimaryColumn('varchar')
-  id: string = uuidUser();
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-  @Column('varchar', { default: '' })
+  @Column('varchar', { length: 150 })
   name: string = 'USER';
 
-  @Column('varchar')
-  login: string = 'user';
+  @Column('varchar', { length: 150 })
+  login: string = 'login';
 
-  @Column('varchar')
+  @Column('varchar', { length: 150 })
   password: string = 'P@55w0rd';
 
   static toResponse(user: { id: string; name: string; login: string }) {

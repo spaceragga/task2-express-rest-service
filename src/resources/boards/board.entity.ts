@@ -1,20 +1,21 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-import BoardColumn from '../columns/column.entity';
-
-const uuidBoard = require('uuid').v4;
-
+interface IColumn {
+  id: string;
+  title?: string;
+  order?: number;
+}
 
 @Entity({ name: 'boards' })
 class Board {
   @PrimaryGeneratedColumn('uuid')
-  id: string = uuidBoard();
+  id!: string;
 
-  @Column('varchar')
+  @Column('varchar', { length: 150 })
   title: string = 'Board';
 
-  @Column('jsonb')
-  columns: BoardColumn[] = [];
+  @Column('json')
+  columns: IColumn[] = [];
 
   static toResponse(board: Omit<Board, 'id'>) {
     return board;
