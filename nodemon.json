@@ -1,7 +1,7 @@
 {
     "ignore": ["node_modules"],
     "watch": ["./src/**/*.ts"],
-    "exec": "ts-node src/server.ts",
+    "exec": "npx ts-node src/server.ts",
     "ext": "ts",
     "require": "dotenv/config"
 }

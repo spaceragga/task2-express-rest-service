@@ -2,16 +2,11 @@ const bcrypt = require('bcrypt');
 
 const DEFAULT_SALT_ROUNDS = 10;
 
-export const hashPassword = async (password: any) => {
+export const hashPassword = async (password: string) => {
   const salt = await bcrypt.genSalt(DEFAULT_SALT_ROUNDS);
-  console.log('SALT:');
-  console.log(salt);
   const hash = await bcrypt.hash(password, salt);
-  console.log('HASH:');
-  console.log(hash);
-
   return hash;
 };
 
-export const checkHashedPassword = async (password: any, hash: any) =>
+export const checkHashedPassword = async (password: string, hash: string) =>
   bcrypt.compare(password, hash);

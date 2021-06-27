@@ -17,7 +17,7 @@ const {
 export const config = {
   type: 'postgres',
   
-  synchronize: false,
+  synchronize: true,
   host: POSTGRES_HOST_DOCKER || 'localhost',
   port: Number(POSTGRES_PORT) || 5433,
   username: POSTGRES_USER || 'postgres',
