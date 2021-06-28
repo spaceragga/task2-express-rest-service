@@ -28,7 +28,7 @@ const logger = createLogger({
     new transports.Console(),
     new transports.File({
       level: 'info',
-      filename: 'info.log',
+      filename: './logs/info.log',
       format: format.combine(format.uncolorize(), format.json(), myFormat),
     }),
   ],
