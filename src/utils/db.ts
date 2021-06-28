@@ -2,15 +2,14 @@ import { getConnection, createConnection, getRepository } from 'typeorm';
 import { config } from '../common/ormconfig';
 
 const User = require('../resources/users/user.entity');
+const { hashPassword } = require('../auth/hashHelper');
 
 export const checkAdmin = async () => {
   const userRepository = getRepository(User);
 
   const user = await userRepository.findOne({
     where: {
-      login: 'admin',
-      password: 'admin',
-      // password: '$2b$10$a6UoOjClJUF3apK3UkG7o.DUXN.x../bFym.u.bOYDMKhxzH/8iPG',
+      login: 'admin'
     },
   });
 
@@ -18,7 +17,7 @@ export const checkAdmin = async () => {
     const newUser: typeof User = await userRepository.create({
       name: 'admin',
       login: 'admin',
-      password: 'admin',
+      password: await hashPassword('admin'),
     });
     await userRepository.save(newUser);
   }
