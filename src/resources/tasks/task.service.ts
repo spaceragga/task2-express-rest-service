@@ -1,5 +1,5 @@
-const TaskModel = require('./task.model');
-const tasksRepo = require('./task.memory.repository');
+const TaskModel = require('./task.entity');
+const tasksRepo = require('./task.repository');
 /**
  * Service for getting all Tasks
  * @returns {function(): Object[]} the returned Object array

@@ -1,5 +1,5 @@
-const BoardModel = require('./board.model');
-const boardsRepo = require('./board.memory.repository');
+const BoardModel = require('./board.entity');
+const boardsRepo = require('./board.repository');
 /**
  * Service for getting all Boards
  * @returns {function(): Object[]} the returned Object array

@@ -1,6 +1,16 @@
 // const { PORT } = require('./common/config');
+import { connectToDB } from './utils/db';
+
 const server = require('./app');
 
-server.listen(4000, () =>
-  global.console.log(`App is running on http://localhost:4000`)
-);
+
+const PORT = 4000;
+
+const start = async () => {
+  await connectToDB();
+
+server.listen(PORT, () => console.log(`App is running on http://localhost:${PORT}`));
+
+};
+
+start();

@@ -11,3 +11,6 @@ build/
 
 # ignore .log file
 logs/
+
+# postgres files
+pgdata/

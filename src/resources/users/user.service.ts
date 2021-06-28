@@ -1,5 +1,5 @@
-const UserModel = require('./user.model');
-const usersRepo = require('./user.memory.repository');
+const UserModel = require('./user.entity');
+const usersRepo = require('./user.repository');
 /**
  * Service for getting all Users
  * @returns {function(): Object[]} the returned Object array
