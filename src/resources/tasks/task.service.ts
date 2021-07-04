@@ -1,4 +1,3 @@
-const TaskModel = require('./task.entity');
 const tasksRepo = require('./task.repository');
 /**
  * Service for getting all Tasks
@@ -23,14 +22,14 @@ const removeTask = (id: string): (() => void) => tasksRepo.removeTaskDB(id);
  * @returns {function(): Object} the returned Object
  */
 const createTask = (task: object): (() => Object) =>
-  tasksRepo.createTaskDB(new TaskModel({ ...task }));
+  tasksRepo.createTaskDB(task);
 /**
  * Service for update Task by id
  * @param {String} id Task id
  * @param {Object} board set data
  * @returns {function(): Object} the returned Object
  */
-const updateTask = (id: string, board: object): (() => Object) =>
-  tasksRepo.updateTaskDB(id, board);
+const updateTask = (boardId: string, id: string, board: object): (() => Object) =>
+  tasksRepo.updateTaskDB(boardId, id, board);
 
 module.exports = { getAllTask, getTask, removeTask, createTask, updateTask };

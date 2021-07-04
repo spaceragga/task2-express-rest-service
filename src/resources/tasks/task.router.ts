@@ -50,7 +50,9 @@ router.route('/').post(
 
 router.route('/:id').put(
   catchError(async (req: Request, res: Response) => {
-    const task = await tasksRepo.updateTask(req.params['id'], req.body);
+    const { boardId, id } = req.params;
+    const { body } = req;
+    const task = await tasksRepo.updateTask(boardId, id, body);
 
     res.status(OK).json(Task.toResponse(task));
   })

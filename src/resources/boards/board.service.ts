@@ -1,4 +1,3 @@
-const BoardModel = require('./board.entity');
 const boardsRepo = require('./board.repository');
 /**
  * Service for getting all Boards
@@ -23,7 +22,7 @@ const removeBoard = (id: string): (() => void) => boardsRepo.removeBoardDB(id);
  * @returns {function(): Object} the returned Object
  */
 const createBoard = (board: object): (() => Object) =>
-  boardsRepo.createBoardDB(new BoardModel(board));
+  boardsRepo.createBoardDB(board);
 /**
  * Service for update Board by id
  * @param {String} id Board id

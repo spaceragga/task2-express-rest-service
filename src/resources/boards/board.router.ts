@@ -25,7 +25,8 @@ router.route('/:id').get(
 
 router.route('/:id').delete(
   catchError(async (req: Request, res: Response) => {
-    await boardsRepo.removeBoard(req.params['id']);
+    const { id } = req.params;
+    await boardsRepo.removeBoard(id);
 
     res.sendStatus(NO_CONTENT);
   })

@@ -20,7 +20,7 @@ const getTaskDB = async (id: string): Promise<typeof Task> => {
 
 const removeTaskDB = async (id: string): Promise<void> => {
   const taskRepository = getRepository(Task);
-  const removedTask = await taskRepository.delete(id);
+  const removedTask = await taskRepository.delete({ id });
 
   if (!removedTask) {
     throw new Error(`Couldn't find a task with id: ${id}`);
@@ -29,21 +29,21 @@ const removeTaskDB = async (id: string): Promise<void> => {
 
 const createTaskDB = async (task: typeof Task): Promise<typeof Task> => {
   const taskRepository = getRepository(Task);
-  const taskDB = taskRepository.create(task);
+  const taskDB: typeof Task = taskRepository.create(task);
   return taskRepository.save(taskDB);
 };
 
-const updateTaskDB = async (id: string, user: object): Promise<object> => {
+const updateTaskDB = async (boardId: string, id: string, user: object): Promise<object> => {
   const taskRepository = getRepository(Task);
-  const taskDB = await taskRepository.findOne(id);
+  const taskDB: typeof Task = await taskRepository.findOne(id, {
+    where: { boardId },
+  });
 
   if (!taskDB) {
     throw new Error(`Couldn't find a task with id: ${id}`);
   }
 
-  const updatedTask = await taskRepository.update(id, user);
-
-  return updatedTask;
+  return taskRepository.save({ ...taskDB, ...user });
 };
 
 module.exports = {

@@ -7,7 +7,7 @@ dotenv.config({
 });
 
 const {
-  POSTGRES_HOST,
+  POSTGRES_HOST_DOCKER,
   POSTGRES_PORT,
   POSTGRES_USER,
   POSTGRES_PASSWORD,
@@ -16,20 +16,21 @@ const {
 
 export const config = {
   type: 'postgres',
-  // name: 'my-connection',
+  
   synchronize: true,
-  host: POSTGRES_HOST || 'postgres',
-  port: Number(POSTGRES_PORT) || 5432,
+  host: POSTGRES_HOST_DOCKER || 'localhost',
+  port: Number(POSTGRES_PORT) || 5433,
   username: POSTGRES_USER || 'postgres',
-  password: POSTGRES_PASSWORD || 'ac691n',
+  password: POSTGRES_PASSWORD || 'postgres',
   database: POSTGRES_DB || 'postgres',
   logging: true,
-  autoReconnect: true,
-  reconnectTries: Number.MAX_VALUE,
-  reconnectionInterval: 1000,
+  // autoReconnect: true,
+  migrationsRun: true,
+  // reconnectTries: Number.MAX_VALUE,
+  // reconnectionInterval: 1000,
   entities: [path.join(__dirname, '../**/*.entity.ts')],
   
-  migrationsTableName: 'migrations',
+  // migrationsTableName: 'migrations',
   migrations: [path.join(__dirname, '../../database/migrations/*.ts')],
   cli: { migrationsDir: 'src/migrations' },
 } as ConnectionOptions;
